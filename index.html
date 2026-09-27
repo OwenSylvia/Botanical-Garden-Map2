@@ -11,7 +11,6 @@
         <link rel="stylesheet" href="css/L.Control.Locate.min.css">
         <link rel="stylesheet" href="css/qgis2web.css">
         <link rel="stylesheet" href="css/fontawesome-all.min.css">
-        <link rel="stylesheet" href="css/leaflet-search.css">
         <link rel="stylesheet" href="css/leaflet.photon.css">
         <style>
         html, body, #map {
@@ -40,7 +39,6 @@
         <script src="js/leaflet.photon.js"></script>
         <script src="js/proj4.js"></script>
         <script src="js/proj4leaflet.js"></script>
-        <script src="js/leaflet-search.js"></script>
         <script src="data/VIP_Features_1.js"></script>
         <script src="data/Garden_Zones_2.js"></script>
         <script src="data/Public_Features_3.js"></script>
@@ -181,7 +179,14 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Popup_Web'] !== null ? autolinker.link(String(feature.properties['Popup_Web']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2"><strong>id</strong><br />' + (feature.properties['id'] !== null ? autolinker.link(String(feature.properties['id']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">description</th>\
+                        <td>' + (feature.properties['description'] !== null ? autolinker.link(String(feature.properties['description']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['pdfmaps_photos'] !== null ? autolinker.link(String(feature.properties['pdfmaps_photos']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -240,7 +245,14 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Popup_Web'] !== null ? autolinker.link(String(feature.properties['Popup_Web']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2"><strong>Zone_ID</strong><br />' + (feature.properties['Zone_ID'] !== null ? autolinker.link(String(feature.properties['Zone_ID']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">description</th>\
+                        <td>' + (feature.properties['description'] !== null ? autolinker.link(String(feature.properties['description']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Photo'] !== null ? autolinker.link(String(feature.properties['Photo']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -292,7 +304,14 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Popup_Web'] !== null ? autolinker.link(String(feature.properties['Popup_Web']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2"><strong>Name</strong><br />' + (feature.properties['Name'] !== null ? autolinker.link(String(feature.properties['Name']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">description</th>\
+                        <td>' + (feature.properties['description'] !== null ? autolinker.link(String(feature.properties['description']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['pdfmaps_photos'] !== null ? autolinker.link(String(feature.properties['pdfmaps_photos']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -462,17 +481,6 @@
         });
         lay.addTo(map);
         setBounds();
-        map.addControl(new L.Control.Search({
-            layer: layer_Garden_Zones_2,
-            initial: false,
-            hideMarkerOnCollapse: true,
-            propertyName: 'Popup_Web'}));
-        if (typeof url === 'undefined') {
-            document.getElementsByClassName('search-button')[0].className += ' fa fa-binoculars';
-        } else {
-            document.getElementsByClassName('search-button')[1].className += ' fa fa-binoculars';
-        }
         </script>        
     </body>
 </html>
-.
