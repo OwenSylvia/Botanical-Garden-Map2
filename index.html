@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="css/L.Control.Locate.min.css">
         <link rel="stylesheet" href="css/qgis2web.css">
         <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
         <link rel="stylesheet" href="css/leaflet.photon.css">
         <style>
         html, body, #map {
@@ -37,6 +38,9 @@
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
         <script src="js/leaflet.photon.js"></script>
+        <script src="js/proj4.js"></script>
+        <script src="js/proj4leaflet.js"></script>
+        <script src="js/leaflet-search.js"></script>
         <script src="data/VIP_Features_1.js"></script>
         <script src="data/Garden_Zones_2.js"></script>
         <script src="data/Public_Features_3.js"></script>
@@ -58,9 +62,15 @@
               });
             }
         }
+        var crs = new L.Proj.CRS('EPSG:3857', '+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs', {
+            resolutions: [2800, 1400, 700, 350, 175, 84, 42, 21, 11.2, 5.6, 2.8, 1.4, 0.7, 0.35, 0.14, 0.07],
+        });
         var map = L.map('map', {
+            crs: crs,
+            continuousWorld: false,
+            worldCopyJump: false, 
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[34.61474765239498,-120.21152603726242],[34.61903846849353,-120.20697751449129]]);
+        }).fitBounds([[34.61512745632103,-120.21152603726242],[34.61865866456749,-120.2069775144913]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/qgis2web/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -171,13 +181,7 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(String(feature.properties['id']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['description'] !== null ? autolinker.link(String(feature.properties['description']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['pdfmaps_photos'] !== null ? autolinker.link(String(feature.properties['pdfmaps_photos']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Popup_Web'] !== null ? autolinker.link(String(feature.properties['Popup_Web']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -236,13 +240,7 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Zone_ID'] !== null ? autolinker.link(String(feature.properties['Zone_ID']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['description'] !== null ? autolinker.link(String(feature.properties['description']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Photo'] !== null ? autolinker.link(String(feature.properties['Photo']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Popup_Web'] !== null ? autolinker.link(String(feature.properties['Popup_Web']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -294,14 +292,7 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2"><strong>Name</strong><br />' + (feature.properties['Name'] !== null ? autolinker.link(String(feature.properties['Name']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">description</th>\
-                        <td>' + (feature.properties['description'] !== null ? autolinker.link(String(feature.properties['description']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['pdfmaps_photos'] !== null ? autolinker.link(String(feature.properties['pdfmaps_photos']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Popup_Web'] !== null ? autolinker.link(String(feature.properties['Popup_Web']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -471,6 +462,16 @@
         });
         lay.addTo(map);
         setBounds();
+        map.addControl(new L.Control.Search({
+            layer: layer_Garden_Zones_2,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'Popup_Web'}));
+        if (typeof url === 'undefined') {
+            document.getElementsByClassName('search-button')[0].className += ' fa fa-binoculars';
+        } else {
+            document.getElementsByClassName('search-button')[1].className += ' fa fa-binoculars';
+        }
         </script>        
     </body>
 </html>
